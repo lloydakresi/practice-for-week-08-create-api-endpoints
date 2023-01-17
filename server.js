@@ -54,6 +54,10 @@ const server = http.createServer((req, res) => {
     // GET /dogs
     if (req.method === 'GET' && req.url === '/dogs') {
       // Your code here
+      res.statusCode = 200;
+      res.headers("Content-Type", "application/code");
+      let parsed = res.end(JSON.stringify(dogs));
+      return parsed;
     }
 
     // GET /dogs/:dogId
@@ -62,6 +66,10 @@ const server = http.createServer((req, res) => {
       if (urlParts.length === 3) {
         const dogId = urlParts[2];
         // Your code here
+        let selectedDog = dogs.find(dogId =>  dogs.dogId === dogId);
+        res.statusCode = 200;
+        res.headers("Content-Type", "application/json");
+        return res.end(JSON.stringify(selectedDog));
       }
     }
 
@@ -69,6 +77,18 @@ const server = http.createServer((req, res) => {
     if (req.method === 'POST' && req.url === '/dogs') {
       const { name, age } = req.body;
       // Your code here
+      let newID = newDogId();
+      let newDog = {
+        dogId: newID,
+        name: name,
+        age: age
+      }
+      dogs.push(newDog)
+
+      res.statusCode = 200;
+      res.headers("Content-Type", "application/json");
+      return res.end(JSON.stringify(newDog));
+
     }
 
     // PUT or PATCH /dogs/:dogId
@@ -77,6 +97,14 @@ const server = http.createServer((req, res) => {
       if (urlParts.length === 3) {
         const dogId = urlParts[2];
         // Your code here
+        let chosenDog = dogs.find(dog=> dog.dogId === dogId);
+        let {name, age} = chosenDog;
+        chosenDog.name = name;
+        chosenDog.age = age;
+
+        res.statusCode = 200;
+        res.headers("Content-Type", "application/json");
+        return res.end(JSON.stringify(chosenDog));
       }
     }
 
@@ -86,6 +114,11 @@ const server = http.createServer((req, res) => {
       if (urlParts.length === 3) {
         const dogId = urlParts[2];
         // Your code here
+        let dogIdx = dogs.findIndex(dog => dog.dogId === dogId)
+        dogs.splice(dogIdx, 1);
+        res.statusCode =200;
+        res.headers("Content-Type", "application/json");
+        return res.end("Successfully Deleted");
       }
     }
 
